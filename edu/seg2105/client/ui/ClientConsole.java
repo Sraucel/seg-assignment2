@@ -62,8 +62,7 @@ public class ClientConsole implements ChatIF
     } 
     catch(IOException exception) 
     {
-      System.out.println("Error: Can't setup connection!"
-                + " Terminating client.");
+      System.out.println("Error with parameters");
       System.exit(1);
     }
     
@@ -83,18 +82,17 @@ public class ClientConsole implements ChatIF
     try
     {
 
-      String message;
+      String msg;
 
       while (true) 
       {
         message = fromConsole.nextLine();
-        client.handleMessageFromClientUI(message);
+        client.handleMessageFromClientUI(msg);
       }
     } 
     catch (Exception ex) 
     {
-      System.out.println
-        ("Unexpected error while reading from console!");
+      System.out.println("Unexpected error while reading from console!");
     }
   }
 
@@ -106,7 +104,7 @@ public class ClientConsole implements ChatIF
    */
   public void display(String message) 
   {
-    System.out.println("> " + message);
+    System.out.println(message);
   }
 
   
@@ -121,8 +119,7 @@ public class ClientConsole implements ChatIF
   {
     String loginID = "";
     int port = 0;
-	  
-	 String host = "";
+	String host = "";
 
 
     try
@@ -137,7 +134,7 @@ public class ClientConsole implements ChatIF
       host = "localhost";
       port = DEFAULT_PORT;
     }
-    ClientConsole chat= new ClientConsole(loginID, host, DEFAULT_PORT);
+    ClientConsole chat= new ClientConsole(loginID, host, port);
     chat.accept();  //Wait for console data
   }
 }

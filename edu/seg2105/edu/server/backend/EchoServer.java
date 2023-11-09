@@ -4,6 +4,8 @@ package edu.seg2105.edu.server.backend;
 // license found at www.lloseng.com 
 
 
+import java.io.IOException;
+
 import OCSF.OCSF.src.ocsf.server.ConnectionToClient;
 import edu.seg2105.client.common.ChatIF;
 import ocsf.server.*;
@@ -99,22 +101,79 @@ public class EchoServer extends AbstractServer
 protected void handleMessageFromClient(Object msg, ocsf.server.ConnectionToClient client) {
 	String msgg = (String)msg;
     
-	if (msgg.startsWith("#login")){
+	if (msgg.startsWith("#login") && login != null){
       String loginID = msgg.substring(7,msgg.length()-1);
 
       client.setInfo(login,loginID);
-      System.out.println("<" + client.getInfo(login) + "> has logged on" );
+      System.out.println("Client has logged on");
     }
     else{
-      this.sendToAllClients(client.getInfo(login) + "> " + msgg);
+      this.sendToAllClients(client.getInfo(login) + msgg);
     }
 	
 }
 
 
 public void handleMessageFromServerUI(String message) {
-	// TODO Auto-generated method stub
+	try {
+	      if (message.startsWith("#")){
+	        handleCommand(message);
+	      }
+	      else {
+	        sendToAllClients("SERVERMSG" + "> " + message);
+	        UI.display(message);
+	      }
+	    }
+	    catch (IOException e){
+	    	
+	    }
 	
+}
+
+public void handleCommand(String cmd) throws IOException {
+	if (cmd.equals("#quit")){
+	      quit();
+
+	    }
+	    else if (cmd.equals("#stop")){
+	      stopListening();
+
+	    }
+	    else if (cmd.equals("#close")){
+	      close();
+
+
+	    }
+	    else if (cmd.equals("#setport")) {
+	      if (!isListening()){
+	        setPort(getPort());
+	        UI.display("port set to "+ getPort());
+	      }
+	      else {
+	        UI.display(cmd +" command can not be executed");
+	      }
+	    }
+
+	    else if (cmd.equals("#getport")) {
+	      UI.display(Integer.toString(getPort()));
+	    }
+	    else if (cmd.equals("#start")) {
+	      if (!isListening()){
+	        listen();
+
+	      }
+	      else {
+	        UI.display(cmd +" command can not be executed");
+	      }
+}
+}
+public void quit() {
+	try {
+		close();
+	}
+	catch(IOException e) {
+		System.exit(0);
+	}
 }
 }
 //End of EchoServer class
