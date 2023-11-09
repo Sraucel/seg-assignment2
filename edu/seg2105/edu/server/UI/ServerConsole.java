@@ -13,7 +13,7 @@ public class ServerConsole implements ChatIF{
 
 	final public static int DEFAULT_PORT = 5555;
 	
-	EchoServer server;
+	EchoServer e;
 	
 	Scanner Console;
 	
@@ -22,11 +22,11 @@ public class ServerConsole implements ChatIF{
 	public ServerConsole(int port) 
 	{
 		Console = new Scanner(System.in); 
-		server = new EchoServer(port, this);
+		e = new EchoServer(port, this);
 	    
 		try
 	    {
-	      server.listen(); //Start listening for connections
+	      e.listen(); //Start listening for connections
 	    }
 	    
 		catch (Exception ex)
@@ -47,14 +47,13 @@ public class ServerConsole implements ChatIF{
 	      while (true) 
 	      {
 	        message = Console.nextLine();
-	        server.handleMessageFromServerUI(message);
+	        e.handleMessageFromServerUI(message);
 	      }
 	    } 
 	    catch (Exception ex) 
 	    {
 	    	ex.printStackTrace();
-	      System.out.println
-	        ("Unexpected error while reading from console!");
+	      System.out.println("Unexpected error while reading from console!");
 	    }
 	  }
 	  
